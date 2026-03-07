@@ -1,3 +1,4 @@
 #COMANDOS EM PYTHON#
 
-pip install fastapi uvicorn sqlalchemy passlib[bcrypt] python-jose[crypt] python-dotenv python-multipart
+#instala o ambiente virtual: python -m venv venv / venv\Scripts\activate#
+#pip install fastapi uvicorn sqlalchemy passlib[bcrypt] python-jose[crypt] python-dotenv python-multipart#
