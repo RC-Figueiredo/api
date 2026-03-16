@@ -2,3 +2,4 @@
 
 #instala o ambiente virtual: python -m venv venv / venv\Scripts\activate#
 #pip install fastapi uvicorn sqlalchemy passlib[bcrypt] python-jose[crypt] python-dotenv python-multipart#
+#pip install sqlalchemy-utils# parametros de utilidades do mysqlalchemy,ex:uma coluna tipo string so pode ter um numero limitado caracteres
