@@ -20,7 +20,7 @@ class Usuario(Base):
     email =Column ("email",String,nullable=False)
     senha =Column ("senha",String)
     ativo = Column ("ativo",Boolean)
-    admin = Column ("admin",Boolean,default=False)
+    admin = Column ("admin",Boolean,default=False)  
     
     #a execução das colunas do banco,executa linha a linha
     def __init__(self,nome,email,senha,ativo,admin): 
@@ -60,11 +60,18 @@ class Pedido(Base):
 class ItenPedido(Base):
     __tablename__ = "itenpedidos"
 
-    id = 
-    quantidade =
-    sabor =
-    tamanho = 
-    preco_unitario = 
-    pedido = 
+    id = Column("id",Integer,primary_key=True,autoincrement=True,nullable=False)
+    quantidade = Column ("quantidade",Integer,nullable=False)
+    sabor = Column("sabor",String)
+    tamanho = Column("tamanho",String)
+    preco_unitario = Column("precoUN",Float)
+    pedido = Column("pedido",ForeignKey("pedidos.id"))
 
- 
+    def __init__(self,id,quantidade,sabor,tamanho,preco_unitario,pedido):
+        self.id = id
+        self.qauntidade = quantidade
+        self.sabor = sabor
+        self.tamanho = tamanho
+        self.preco_unitario = preco_unitario
+        self.pedido = pedido
+  
