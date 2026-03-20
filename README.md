@@ -3,16 +3,15 @@ Treinamento de uma api teste,delivery
 
 # COMANDOS DE DEPENDECIAS
 
-<<<<<<< HEAD
-# instalar o ambiente virtual:
+# Instalar o ambiente virtual:
 ```
  python -m venv venv / venv\Scripts\activate
 ```
-# INSTALAR AS BIBLIOTECAS UTILIZADAS
+# Instalar as bibliotecas utilizadas
 ```
 pip install fastapi uvicorn sqlalchemy passlib[bcrypt] python-jose[crypt] python-dotenv python-multipart
 ```
-# instalar parametros de utilidades do mysqlalchemy
+# Instalar parametros de utilidades do mysqlalchemy
 ```
 pip install sqlalchemy-utils
 ```
