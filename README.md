@@ -3,6 +3,7 @@ Treinamento de uma api teste,delivery
 
 # COMANDOS DE DEPENDECIAS
 
+<<<<<<< HEAD
 # instalar o ambiente virtual:
 ```
  python -m venv venv / venv\Scripts\activate
