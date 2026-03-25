@@ -19,3 +19,11 @@ pip install sqlalchemy-utils
 ```
 pip install alembic
 ```
+# Commit do banco de dados
+```
+alembic revision --autogenerate -m ""
+```
+# Para rodar/enviar as informações para o banco de dados
+```
+alembic upgrade head
+```

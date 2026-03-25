@@ -33,20 +33,20 @@ class Usuario(Base):
 #pedido
 
 class Pedido(Base):
-    __tablename___ = "pedidos"
+    __tablename__ = "pedidos"
 
 #choiceType organiza a coluna status,permitindo ter apenas tres opções de valores,construcao do choiceType
-    STATUS_PEDIDOS = (
+   # STATUS_PEDIDOS = (
         #*(chave,valor)*#
-        ("PENDENTE","PENDENTE")
-        ("CANCELADO","CANCELADO")
-        ("FINALIZADO","FINALIZADO")
-    )
+        #("PENDENTE","PENDENTE"),
+        #("CANCELADO","CANCELADO"),
+        #("FINALIZADO","FINALIZADO")
+    #)
 
     id = Column("id",Integer,primary_key=True,autoincrement=True,nullable=False)
-    status = Column("status",ChoiceType(choices=STATUS_PEDIDOS))#*status pendente,cancelado,finalizado*#
+    status = Column("status",String)#*status pendente,cancelado,finalizado*#
     usuario =Column("usuario", ForeignKey("usuarios.id"))
-    preco = Column("preco",float)
+    preco = Column("preco",Float)
     #item = ("item")
 
     def __init__(self,id,usuario,status="Pendente",preco=0):
