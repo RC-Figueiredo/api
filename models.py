@@ -23,7 +23,7 @@ class Usuario(Base):
     admin = Column ("admin",Boolean,default=False)  
     
     #a execução das colunas do banco,executa linha a linha
-    def __init__(self,nome,email,senha,ativo,admin): 
+    def __init__(self,nome,email,senha,ativo=True,admin=False): 
         self.nome = nome
         self.email = email
         self.senha = senha
