@@ -49,8 +49,7 @@ class Pedido(Base):
     preco = Column("preco",Float)
     #item = ("item")
 
-    def __init__(self,id,usuario,status="Pendente",preco=0):
-        self.id = id
+    def __init__(self,usuario,status="Pendente",preco=0):
         self.status = status
         self.usuario = usuario
         self.preco = preco
