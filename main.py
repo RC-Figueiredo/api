@@ -6,6 +6,9 @@ import os
 
 load_dotenv()
 SECRET_KEY = os.getenv("SECRET_KEY")
+ALGORITHM=os.getenv("ALGORITHM")
+#*necessario transforma-lo em numero inteiro,para indicar o tempo de expiração do token*#
+ACESS_TOKEN_EXPIRE_MINUTES= int(os.getenv("ACESS_TOKEN_EXPIRE_MINUTES"))
 
 app = FastAPI()
 
