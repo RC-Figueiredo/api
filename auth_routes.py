@@ -6,6 +6,7 @@ from schemes import usuarioSchemes, LoginScheme
 from sqlalchemy.orm import Session
 from jose import jwt, JWTError
 from datetime import datetime, timedelta, timezone 
+from fastapi.security import OAuth2PasswordRequestForm
 
 auth_router = APIRouter(prefix="/auth", tags=["lista"])
 #*cria o token de autenticação e cronomeetra o tempo de expiração*#
@@ -46,6 +47,7 @@ async def criar_conta(usuario_Schemes:usuarioSchemes,session:Session =Depends(pe
         session.add(novo_usuario)
         session.commit()
         return{"Mensagem":f"usuario cadastrado com sucesso {usuario_Schemes.email}"}  
+
 #*verifica se o usuario existe e se ele esta com o acesso permitido para fazer o login  *#
 @auth_router.post("/login")
 async def login(LoginScheme: LoginScheme,session:Session = Depends(pegar_sessao)):
@@ -60,6 +62,19 @@ async def login(LoginScheme: LoginScheme,session:Session = Depends(pegar_sessao)
                "refresh_token":refresh_token,
                "token_type":"Bearer"
                }
+#*segundo login*#
+@auth_router.post("/login_form")
+async def login_form(dados_formulario: OAuth2PasswordRequestForm= Depends(),session:Session = Depends(pegar_sessao)):
+    usuario = autenticar_usuario(dados_formulario.username,dados_formulario.password, session)
+
+    if not usuario:
+        raise HTTPException(status_code=400,detail="Usuario nao encontrado ou credenciais incorretas" )
+    else:
+        acess_token = criar_token(usuario.id)
+        return{"acess_token":acess_token,
+               "token_type":"Bearer"
+               }
+
     
 @auth_router.get("/refresh")
 async def use_refresh_token(usuario: Usuario= Depends(verificar_token)):
