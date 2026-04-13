@@ -4,7 +4,7 @@ from dependecies import pegar_sessao,verificar_token
 from main import bcrypt_context, ALGORITHM, ACESS_TOKEN_EXPIRE_MINUTES,SECRET_KEY
 from schemes import usuarioSchemes, LoginScheme
 from sqlalchemy.orm import Session
-from jose import jwt
+from jose import jwt, JWTError
 from datetime import datetime, timedelta, timezone 
 
 auth_router = APIRouter(prefix="/auth", tags=["lista"])
@@ -12,7 +12,7 @@ auth_router = APIRouter(prefix="/auth", tags=["lista"])
 def criar_token(id_usuario,duracao_token = timedelta(minutes = ACESS_TOKEN_EXPIRE_MINUTES)):#*cria o hash,que seria a criptografia da senha*#
     #JWT
     data_expiracao = datetime.now(timezone.utc) + duracao_token
-    dic_info = {"sub":id_usuario,"exp":data_expiracao }
+    dic_info = {"sub":str(id_usuario),"exp":data_expiracao }
     jwt_codificado = jwt.encode(dic_info,SECRET_KEY,ALGORITHM ) 
 
     return jwt_codificado
