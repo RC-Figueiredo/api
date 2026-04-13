@@ -1,6 +1,6 @@
 from fastapi import APIRouter,Depends,HTTPException
 from models import Usuario
-from dependecies import pegar_sessao
+from dependecies import pegar_sessao,verificar_token
 from main import bcrypt_context, ALGORITHM, ACESS_TOKEN_EXPIRE_MINUTES,SECRET_KEY
 from schemes import usuarioSchemes, LoginScheme
 from sqlalchemy.orm import Session
@@ -16,11 +16,6 @@ def criar_token(id_usuario,duracao_token = timedelta(minutes = ACESS_TOKEN_EXPIR
     jwt_codificado = jwt.encode(dic_info,SECRET_KEY,ALGORITHM ) 
 
     return jwt_codificado
-#*---------------------------------------------------------------------------------------------------------------------------------------------------------*#
-def verificar_token(token,session: Session=Depends(pegar_sessao)):
-    usuario = session.query(Usuario).filter(usuario.id==1).first()
-
-    return usuario
 #*---------------------------------------------------------------------------------------------------------------------------------------------------------*#
 def autenticar_usuario(email,senha,session):
     usuario= session.query(Usuario).filter(Usuario.email==email).first()#*irá verificar se a hash e a senha utilizada por um usuario especifico,coonfere,se é permitido liberar o acesso*#
@@ -67,7 +62,10 @@ async def login(LoginScheme: LoginScheme,session:Session = Depends(pegar_sessao)
                }
     
 @auth_router.get("/refresh")
-async def use_refresh_token(token):
+async def use_refresh_token(usuario: Usuario= Depends(verificar_token)):
     #*verificação do token*#
-    usuario= verificar_token(token)
-    acesss_token= criar_token(criar_token(usuario.id))
+   acess_token= criar_token(criar_token(usuario.id))
+   return{
+    "acess_token": acess_token,
+    "token_type":"Bearer"
+               }
