@@ -26,3 +26,9 @@ async def cancelar_pedido(id_pedido: int, session :Session= Depends(pegar_sessao
     pedido=session.query(Pedido).filter(Pedido.id==id_pedido).first()
     if not Pedido:
         raise HTTPException(status_code=400, detail="Pedido não encontrado")
+    pedido.status = "CANCELADO"
+    session.commit()
+    return{
+        "Mensagem": f"Pedido numero: {id_pedido} cancelado com sucesso",
+        "pedido": pedido
+    }

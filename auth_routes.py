@@ -22,9 +22,8 @@ def autenticar_usuario(email,senha,session):
     usuario= session.query(Usuario).filter(Usuario.email==email).first()#*irá verificar se a hash e a senha utilizada por um usuario especifico,coonfere,se é permitido liberar o acesso*#
     if not usuario:
         return False
-    elif bcrypt_context.verify(senha,usuario.senha):
+    elif not bcrypt_context.verify(senha,usuario.senha):
         return False
-
     return usuario
 #*---------------------------------------------------------------------------------------------------------------------------------------------------------*#
 
@@ -63,7 +62,7 @@ async def login(LoginScheme: LoginScheme,session:Session = Depends(pegar_sessao)
                "token_type":"Bearer"
                }
 #*segundo login*#
-@auth_router.post("/login_form")
+@auth_router.post("/login-form")
 async def login_form(dados_formulario: OAuth2PasswordRequestForm= Depends(),session:Session = Depends(pegar_sessao)):
     usuario = autenticar_usuario(dados_formulario.username,dados_formulario.password, session)
 
@@ -79,7 +78,7 @@ async def login_form(dados_formulario: OAuth2PasswordRequestForm= Depends(),sess
 @auth_router.get("/refresh")
 async def use_refresh_token(usuario: Usuario= Depends(verificar_token)):
     #*verificação do token*#
-   acess_token= criar_token(criar_token(usuario.id))
+   acess_token= criar_token(usuario.id)
    return{
     "acess_token": acess_token,
     "token_type":"Bearer"

@@ -6,6 +6,7 @@ from models import Usuario
 from jose import jwt, JWTError
 
 
+
 def pegar_sessao():
     #* "try" tenta executar o codigo,yield returna o valor mas nao encerra o codigo,finally finaliza e fecha o session independente do que aconteça*#
     try:
@@ -19,12 +20,15 @@ def pegar_sessao():
 def verificar_token(token:str = Depends(oauth2_schema),session: Session = Depends(pegar_sessao)):
     try:
         dic_info=jwt.decode(token,SECRET_KEY, ALGORITHM)
-        id_usuario = int(dic_info("sub"))
-    except JWTError:
+        id_usuario = int(dic_info.get("sub"))
+
+    except JWTError as erro:
+        print(erro)
         raise HTTPException(status_code=401,detail="Acesso Negado, Verifique a validade do token")
+   
     
     usuario = session.query(Usuario).filter(Usuario.id==id_usuario).first()
     if not usuario:
-        raise HTTPException(code = 401, detail= "Acesso Invalido")
+        raise HTTPException(status_code=401, detail="Acesso Invalido")
 
     return usuario
