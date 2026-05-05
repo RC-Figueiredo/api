@@ -17,7 +17,7 @@ def pegar_sessao():
         session.close()
         
 #*---------------------------------------------------------------------------------------------------------------------------------------------------------*#
-def verificar_token(token,session: Session = Depends(pegar_sessao)):
+def verificar_token(token:str = Depends(oauth2_schema),session: Session = Depends(pegar_sessao)):
     print("TOKEN CHEGANDO:", token)
     try :
         dic_info = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
