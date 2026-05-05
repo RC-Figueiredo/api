@@ -55,9 +55,9 @@ async def login(LoginScheme: LoginScheme,session:Session = Depends(pegar_sessao)
     if not usuario:
         raise HTTPException(status_code=400,detail="Usuario nao encontrado ou credenciais incorretas" )
     else:
-        acess_token = criar_token(usuario.id)
+        access_token = criar_token(usuario.id)
         refresh_token=criar_token(usuario.id,duracao_token=timedelta(days=7) )
-        return{"acess_token":acess_token,
+        return{"access_token":access_token,
                "refresh_token":refresh_token,
                "token_type":"Bearer"
                }
@@ -69,16 +69,16 @@ async def login_form(dados_formulario: OAuth2PasswordRequestForm= Depends(),sess
     if not usuario:
         raise HTTPException(status_code=400,detail="Usuario nao encontrado ou credenciais incorretas" )
     else:
-        acess_token = criar_token(usuario.id)
-        return{"acess_token":acess_token,
+        access_token = criar_token(usuario.id)
+        return{"access_token":access_token,
                "token_type":"Bearer"
                }
 
 @auth_router.get("/refresh")
-async def Use_Refresh_Token(usuario: Usuario= Depends(verificar_token)):
-        #*verificação do token*#
-        access_token = criar_token(usuario.id)
-        return{
-        "acess_token":access_token,
-        "token_type":"Bearer"
-            }
+async def Use_Refresh_Token(usuario: Usuario = Depends(verificar_token)):
+    # Reutiliza o token Bearer do header para validar o usuário e emitir novo access token
+    access_token = criar_token(usuario.id)
+    return {
+        "access_token": access_token,
+        "token_type": "Bearer"
+    }

@@ -7,3 +7,5 @@
 #pip install sqlalchemy-utils# parametros de utilidades do mysqlalchemy,ex:uma coluna tipo string so pode ter um numero limitado caracteres
 
 #pip install alembic# *para fazer migração do banco de dados com seguranaça,NÃO OBRIGATORIO* 
+
+#Extensão SqLite Viewer#
