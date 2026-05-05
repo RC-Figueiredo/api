@@ -74,12 +74,11 @@ async def login_form(dados_formulario: OAuth2PasswordRequestForm= Depends(),sess
                "token_type":"Bearer"
                }
 
-    
 @auth_router.get("/refresh")
-async def use_refresh_token(usuario: Usuario= Depends(verificar_token)):
-    #*verificação do token*#
-   acess_token= criar_token(usuario.id)
-   return{
-    "acess_token": acess_token,
-    "token_type":"Bearer"
-               }
+async def Use_Refresh_Token(usuario: Usuario= Depends(verificar_token)):
+        #*verificação do token*#
+        access_token = criar_token(usuario.id)
+        return{
+        "acess_token":access_token,
+        "token_type":"Bearer"
+            }
