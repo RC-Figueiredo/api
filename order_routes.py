@@ -22,13 +22,18 @@ async def criar_pedido(pedido_Schemes:pedidoSchemes,session :Session= Depends(pe
     return{"Mensagem":f"pedido criado com sucesso {novo_pedido.id}"}
 #*---------------------------------------------------------------------------------------------------------------------------------------------------------*#
 @order_router.post("/pedido/cancelar/{id_pedido}")
-async def cancelar_pedido(id_pedido: int, session :Session= Depends(pegar_sessao)):
+async def cancelar_pedido(id_pedido: int, session :Session= Depends(pegar_sessao),usuario:Usuario = Depends(verificar_token)):
     pedido=session.query(Pedido).filter(Pedido.id==id_pedido).first()
     if not Pedido:
         raise HTTPException(status_code=400, detail="Pedido não encontrado")
+    if not usuario.admin and usuario.id != pedido.usuario:
+        raise HTTPException(status_code=401,detail="Voce nao tem a permissao para mecher neste pedido")
     pedido.status = "CANCELADO"
     session.commit()
     return{
         "Mensagem": f"Pedido numero: {id_pedido} cancelado com sucesso",
         "pedido": pedido
     }
+
+@order_router.get("/Listar")
+async def listar_pedidos(session :Session= Depends(pegar_sessao),usuario:Usuario = Depends(verificar_token))
