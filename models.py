@@ -54,6 +54,9 @@ class Pedido(Base):
         self.usuario = usuario
         self.preco = preco
         #self.item=item
+    
+    def calcular_preco(self):
+        self.preco= 10
 
 #itens_Pedidos
 class ItenPedido(Base):
@@ -67,8 +70,7 @@ class ItenPedido(Base):
     pedido = Column("pedido",ForeignKey("pedidos.id"))
 
     def __init__(self,id,quantidade,sabor,tamanho,preco_unitario,pedido):
-        self.id = id
-        self.qauntidade = quantidade
+        self.quantidade = quantidade
         self.sabor = sabor
         self.tamanho = tamanho
         self.preco_unitario = preco_unitario
