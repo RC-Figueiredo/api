@@ -1,5 +1,5 @@
-from sqlalchemy  import create_engine, Column,Integer, String,Boolean,Float,ForeignKey 
-from sqlalchemy.orm import declarative_base
+from sqlalchemy  import create_engine, Column,Integer, String,Boolean,Float,ForeignKey
+from sqlalchemy.orm import declarative_base,relationship
 from sqlalchemy_utils.types import ChoiceType
 
 #conexao com o banco de dados
@@ -47,7 +47,7 @@ class Pedido(Base):
     status = Column("status",String)#*status pendente,cancelado,finalizado*#
     usuario =Column("usuario", ForeignKey("usuarios.id"))
     preco = Column("preco",Float)
-    #item = ("item")
+    itens = relationship("ItenPedido",cascade= "all,delete" )
 
     def __init__(self,usuario,status="Pendente",preco=0):
         self.status = status
@@ -56,7 +56,13 @@ class Pedido(Base):
         #self.item=item
     
     def calcular_preco(self):
-        self.preco= 10
+        #outra forma
+       # preco_unitario = 0
+        #for item in self.itens:
+        #preco_item = preco_unitario * item.quantidade
+        #preco_unitario += preco_item
+
+        self.preco= sum(item.preco_unitario * item.quantidade for item in self.itens)
 
 #itens_Pedidos
 class ItenPedido(Base):
@@ -76,3 +82,5 @@ class ItenPedido(Base):
         self.preco_unitario = preco_unitario
         self.pedido = pedido
   
+  #Criar a migração: alembic revision --autogenerate -m "mensagem"
+  #atualiza o banco alembic upgrade head

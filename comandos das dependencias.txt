@@ -4,7 +4,7 @@
 
 #pip install fastapi uvicorn sqlalchemy passlib[bcrypt] python-jose[crypt] python-dotenv python-multipart#
 
-#python -m pip install bcrypt==4.1.3# atualize para a versao mais recente,se nao ocorre erros de servidor
+#python -m pip install bcrypt --upgrade# atualize para a versao mais recente,se nao ocorre erros de servidor
 
 #python -m pip uninstall bcrypt#
 
