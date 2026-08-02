@@ -1,36 +1,86 @@
-from sqlalchemy import create_engine, Column, String,Integer,ForeignKey,Boolean
-from sqlalchemy.orm import declarative_base 
+from sqlalchemy  import create_engine, Column,Integer, String,Boolean,Float,ForeignKey
+from sqlalchemy.orm import declarative_base,relationship
+from sqlalchemy_utils.types import ChoiceType
 
-# conexao com o banco
-db = create_engine("sqlite:///banco.db")
+#conexao com o banco de dados
+db= create_engine("sqlite:///banco.db")
 
-# criação da base do banco
-base = declarative_base()
+#base do banco de dados
+Base = declarative_base()
 
-# criar classes/tabelas do banco de dados
-# nome
-# email
-# telefone
-# senha
-class Usuario(base):
-    #__tablename__= "nomeTabela" permite lterar o nome da tabela
-    # nullable significa nao permitir o campo vazio
+#classes e tabelas
 
-    __tablename__="usuarios"
 
-    id = Column("id",Integer,primary_key=True,autoincrement=True)
-    nome = Column("Nome",String)
-    email = Column("Email",String,nullable=False)
-    telefone = Column("Telefone", Integer)
-    senha = Column("Senha",String)
-    admin = Column("Admin",Boolean,default=False)
-    endereco = Column("Endereco",String)
-
-    # a funcao "__init__" sera executa toda as vezes que um novo usuario for criado,esta definicao obrigara a passa algumas tabelas do banco de dados para a criação de um novo usuario
-    def __init__(self,nome,senha,email,telefone,endereco,admin=False):
+#usuario
+class Usuario(Base):
+    __tablename__ =  "usuarios"
+    #oq aparece no banco de dados,a criação das colunas
+    id = Column("id",Integer,primary_key=True,autoincrement=True, nullable=False)
+    nome = Column ("nome",String)
+    email =Column ("email",String,nullable=False)
+    senha =Column ("senha",String)
+    ativo = Column ("ativo",Boolean)
+    admin = Column ("admin",Boolean,default=False)  
+    
+    #a execução das colunas do banco,executa linha a linha
+    def __init__(self,nome,email,senha,ativo=True,admin=False): 
         self.nome = nome
+        self.email = email
         self.senha = senha
-        self.email=email
-        self.telefone=telefone
-        self.endereco=endereco
-        self.admin=admin
+        self.ativo = ativo 
+        self.admin = admin
+
+#pedido
+
+class Pedido(Base):
+    __tablename__ = "pedidos"
+
+#choiceType organiza a coluna status,permitindo ter apenas tres opções de valores,construcao do choiceType
+   # STATUS_PEDIDOS = (
+        #*(chave,valor)*#
+        #("PENDENTE","PENDENTE"),
+        #("CANCELADO","CANCELADO"),
+        #("FINALIZADO","FINALIZADO")
+    #)
+
+    id = Column("id",Integer,primary_key=True,autoincrement=True,nullable=False)
+    status = Column("status",String)#*status pendente,cancelado,finalizado*#
+    usuario =Column("usuario", ForeignKey("usuarios.id"))
+    preco = Column("preco",Float)
+    itens = relationship("ItenPedido",cascade= "all,delete" )
+
+    def __init__(self,usuario,status="Pendente",preco=0):
+        self.status = status
+        self.usuario = usuario
+        self.preco = preco
+        #self.item=item
+    
+    def calcular_preco(self):
+        #outra forma
+       # preco_unitario = 0
+        #for item in self.itens:
+        #preco_item = preco_unitario * item.quantidade
+        #preco_unitario += preco_item
+
+        self.preco= sum(item.preco_unitario * item.quantidade for item in self.itens)
+
+#itens_Pedidos
+class ItenPedido(Base):
+    __tablename__ = "itenpedidos"
+
+    id = Column("id",Integer,primary_key=True,autoincrement=True,nullable=False)
+    quantidade = Column ("quantidade",Integer,nullable=False)
+    sabor = Column("sabor",String)
+    tamanho = Column("tamanho",String)
+    preco_unitario = Column("precoUN",Float)
+    pedido = Column("pedido",ForeignKey("pedidos.id"))
+
+    def __init__(self,id,quantidade,sabor,tamanho,preco_unitario,pedido):
+        self.quantidade = quantidade
+        self.sabor = sabor
+        self.tamanho = tamanho
+        self.preco_unitario = preco_unitario
+        self.pedido = pedido
+  
+  #Criar a migração: alembic revision --autogenerate -m "mensagem"
+  #atualiza o banco alembic upgrade head
