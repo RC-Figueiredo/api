@@ -12,5 +12,9 @@
 
 #pip install alembic# *para fazer migração do banco de dados com seguranaça,NÃO OBRIGATORIO* 
 
+#Para migrar utilizar o comando(alembic revision --autogenerate -m "qualquer coisa")
+
+#alembic upgrade head
+
 #Extensão SqLite Viewer#
 

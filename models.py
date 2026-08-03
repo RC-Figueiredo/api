@@ -5,14 +5,14 @@ from sqlalchemy.orm import declarative_base
 db = create_engine("sqlite:///banco.db")
 
 # criação da base do banco
-base = declarative_base()
+Base = declarative_base()
 
 # criar classes/tabelas do banco de dados
 # nome
 # email
 # telefone
 # senha
-class Usuario(base):
+class Usuario(Base):
     #__tablename__= "nomeTabela" permite lterar o nome da tabela
     # nullable significa nao permitir o campo vazio
 
