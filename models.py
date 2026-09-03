@@ -27,10 +27,10 @@ class Usuario(Base):
     endereco = Column("Endereco",String)
 
     # a funcao "__init__" sera executa toda as vezes que um novo usuario for criado,esta definicao obrigara a passa algumas tabelas do banco de dados para a criação de um novo usuario
-    def __init__(self,nome,senha,email,telefone,endereco,admin=False):
+    def __init__(self,nome,email,telefone,senha,endereco,admin=False):
         self.nome = nome
-        self.senha = senha
         self.email=email
         self.telefone=telefone
+        self.senha = senha       
         self.endereco=endereco
         self.admin=admin
